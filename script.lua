@@ -130,6 +130,29 @@ function autoFarmOrders()
             task.wait()
             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("GiveBot"):InvokeServer(bossLocation)
         end
+         elseif game.PlaceId == 16873261961 or game.PlaceId == 15897687172 then
+              local foodItems = {"Cake", "Drink", "Donut","Pastery"}
+        for _, location in pairs(workspace.Main.BotFolder.Locations:GetChildren()) do
+            for _, item in ipairs(foodItems) do
+                local args = { [1] = item, [2] = 16232900 }
+                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("SetHolding"):InvokeServer(unpack(args))
+                task.wait()
+                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("GiveBot"):InvokeServer(location)
+                task.wait()
+            end
+        end
+
+        for _, table in pairs(workspace.Main.BotFolder.Tables:GetChildren()) do
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("InteractTable"):InvokeServer(table)
+        end
+
+        local bossLocation = workspace.Main.BotFolder.BossLocation
+        for _, item in ipairs(foodItems) do
+            local args = { [1] = item, [2] = 16232900 }
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("SetHolding"):InvokeServer(unpack(args))
+            task.wait()
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("GiveBot"):InvokeServer(bossLocation)
+        end
     end
 end
 
