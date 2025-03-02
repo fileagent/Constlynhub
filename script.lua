@@ -1,7 +1,7 @@
 -- source code of script and soon it's will be obf
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/main.lua"))()
 
-if game:GetService("Players").LocalPlayer.Name == "mozianko" then
+if game:GetService("Players").LocalPlayer.Name == "mozianko" or  game:GetService("Players").LocalPlayer.Name == "aNyMeowNya" then
 library.rank = "developer"
 else
     library.rank = "Premium"
