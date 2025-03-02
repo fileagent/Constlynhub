@@ -1,0 +1,1 @@
+-- source code of script and soon it's will be obf
