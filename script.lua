@@ -26,11 +26,13 @@ wait(1)
 local Init = library:Init()
 
 local Tab1 = Init:NewTab("Example tab")
+local Tab4 = Init:NewTab("Credits")
 
 local Section1 = Tab1:NewSection("Example Components")
-
+local Section4 = Tab1:NewSection("Credits:")
 
 local Label1 = Tab1:NewLabel("Example label", "left")--"left", "center", "right"
+local Label1 = Tab4:NewLabel("Powered By Developer Team: ConstancePrimeau Wolny024 | 🛠️", "center")--"left", "center", "right"
 
 local Toggle1 = Tab1:NewToggle("Example toggle", false, function(value)
     local vers = value and "on" or "off"
