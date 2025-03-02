@@ -777,7 +777,7 @@ function library:Introduction()
     xsx.Font = Enum.Font.Code
     xsx.Text = "powered by Constlynhub"
     xsx.TextColor3 = Color3.fromRGB(124, 124, 124)
-    xsx.TextSize = 10.000
+    xsx.TextSize = 8.000
     xsx.TextTransparency = 1
     
     text.Name = "text"
