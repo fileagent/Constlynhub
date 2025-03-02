@@ -6,7 +6,7 @@ library.rank = "developer"
 else
     library.rank = "Premium"
 end
-local Wm = library:Watermark("Constlynhub | v" .. library.version ..  " | " .. library:GetUsername() .. " | rank: " .. library.rank)
+local Wm = library:Watermark("Constlynhub 🌐 | v" .. library.version ..  " | " .. library:GetUsername() .. " | rank: " .. library.rank)
 local FpsWm = Wm:AddWatermark("fps: " .. library.fps)
 coroutine.wrap(function()
     while wait(.75) do
