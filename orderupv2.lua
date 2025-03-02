@@ -155,7 +155,7 @@ end
 
 -- Creating GUI with sections, functionality, and controls
 local Window = Library:Window({ text = "ConstlynHub" })
-local TabSection = Window:TabSection({ text = "Restaurant Tycoon 2" })
+local TabSection = Window:TabSection({ text = "order up" })
 
 local Tab = TabSection:Tab({
     text = "Main",
