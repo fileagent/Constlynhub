@@ -662,3 +662,4 @@ function AdvancedUI:CreateWindow(title, position, size, icon)
     
     -- Apply shadow effect
 local shadow = Util.Shadow(mainFrame, 30, 0.5, Color3.fromRGB(0, 0, 0), 0)
+end
