@@ -970,3 +970,4 @@ function window:AddSlider(text, min, max, default, callback, parent)
     
     return sliderFrame
 end
+end
