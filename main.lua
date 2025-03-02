@@ -74,8 +74,8 @@ local drag = function(obj, latency)
 end
 
 local library = {
-    version = "2.0.2",
-    title = title or "xsx " .. tostring(math.random(1,366)),
+    version = "0.1.0 Beta Version",
+    title = title or "Constlynhub" .. tostring(math.random(1,366)),
     fps = 0,
     rank = "private"
 }
