@@ -74,7 +74,7 @@ function antiLags()
         local character = player.Character
         if character then
             for _, item in pairs(character:GetChildren()) do
-                if item:IsA("Model") and (item.Name == "Fries" or item.Name == "Salad" or item.Name == "Burger" or item.Name == "Soda") then
+                if item:IsA("Model") and (item.Name == "Fries" or item.Name == "Salad" or item.Name == "Burger" or item.Name == "Soda" or item.Name == "Cake" or item.Name == "Sushi" or item.Name == "Nigiri") then
                     item:Destroy()
                 end
             end
