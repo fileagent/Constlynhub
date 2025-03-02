@@ -219,7 +219,14 @@ Section:Toggle({
         end
     end
 })
-
+Section:Dropdown({
+    text = "Dropdown",
+    list = {"Diner", "Bakery", "Japanese"},
+    default = "Diner",
+    callback = function(selected)
+        getgenv().NameOfRestourant = selected
+    end
+})
 Section:Toggle({
     text = "Auto Crates [LOBBY] | 🍴",
     state = false,
@@ -232,19 +239,22 @@ Section:Toggle({
                         local foodItems = {"Burger", "Salad", "Soda", "Fries"}
                         local foodItems1 = {"Drinks","Pastery","Donut","Cake"}
                         local foodItems2 = {"Sushi","Nigiri","Ramen","Japanese_Drink"}
-                       
+                       if getgenv().NameOfRestourant == "Diner" then
                         for _, item in ipairs(foodItems) do
                             local args = { "Diner", item, "Money" }
                             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("AttemptCrate"):InvokeServer(unpack(args))
                         end
+                                elseif getgenv().NameOfRestourant == "Bakery" then
                                 for _, item1 in ipairs(foodItems1) do
                             local args = { "Bakery", item1, "Money" }
                             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("AttemptCrate"):InvokeServer(unpack(args))
                         end
+                                    elseif getgenv().NameOfRestourant == "Japanese" then
                                 for _, item2 in ipairs(foodItems2) do
                             local args = { "Japanese", item2, "Money" }
                             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("AttemptCrate"):InvokeServer(unpack(args))
                         end
+                                end
                     else
                         task.wait()
                         getgenv().autocratesConnection:Disconnect()
@@ -260,7 +270,7 @@ Section:Toggle({
     end
 })
 
-Section:Slider({
+--[[Section:Slider({
     text = "Slider",
     min = 10,
     max = 100,
@@ -269,14 +279,7 @@ Section:Slider({
     end
 })
 
-Section:Dropdown({
-    text = "Dropdown",
-    list = {"Apple", "Banana", "Coconut"},
-    default = "Apple",
-    callback = function(selected)
-        print(selected)
-    end
-})
+
 
 Section:Textbox({
     text = "Textbox",
@@ -300,4 +303,4 @@ Section:Keybind({
     callback = function(key)
         print("Triggered Keybind: ", key)
     end
-})
+})]]
