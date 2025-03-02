@@ -5,6 +5,7 @@ game:GetService("ReplicatedStorage").Events.Local.Alert:Fire("ConstlynHub","THX 
 -- Function to delete objects for anti-lag
 function deleteForAntiLags()
     if not getgenv().onlyonetime then
+    local targets = {}
     if game.PlaceId == 15812335463 or game.PlaceId == 16872617739 then
     local targets = {
         workspace.Main.Kitchen.Buns,
@@ -20,23 +21,8 @@ function deleteForAntiLags()
         workspace.Main.Kitchen:GetChildren()[4],
         workspace.Main.Kitchen.Trash,
     }
-
-    for _, obj in ipairs(targets) do
-        if obj then
-            obj:Destroy()
-        end
-    end
-            getgenv().onlyonetime = true
-        elseif getgenv().onlyonetime then
-            return
-
-        end
-    end
-end
-function deleteForAntiLags1()
-    if not getgenv().onlyonetime1 then
-if game.PlaceId == 15812335463 or game.PlaceId == 16872617739 then
-    local targets = {
+        elseif game.PlaceId == 15812335463 or game.PlaceId == 16872617739 then
+            local targets = {
     workspace.Main.Kitchen:GetChildren()[17],
     workspace.Main.Kitchen.Bush_03,
     workspace.Main.Kitchen:GetChildren()[19],
@@ -57,15 +43,17 @@ if game.PlaceId == 15812335463 or game.PlaceId == 16872617739 then
     workspace.Main.Kitchen.Trash,
     workspace.Main.Kitchen.UncutMeat,
 }
+        end
     for _, obj in ipairs(targets) do
         if obj then
             obj:Destroy()
         end
     end
-            getgenv().onlyonetime1 = true
-        elseif getgenv().onlyonetime1 then
+            getgenv().onlyonetime = true
+        elseif getgenv().onlyonetime then
             return
-        end
+
+
     end
 end
 -- Function to handle anti-lag by cleaning player-generated models
@@ -211,9 +199,8 @@ Section:Toggle({
         getgenv().antilag = state
         if getgenv().antilag then
             deleteForAntiLags()
-            deleteForAntiLags1()
+           
             getgenv().onlyonetime = true
-            getgenv().onlyonetime1 = true
             if not getgenv().antilagConnection then
                 getgenv().antilagConnection = game:GetService("RunService").Heartbeat:Connect(function()
                     if getgenv().antilag then
