@@ -1,5 +1,5 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/source.lua"))()
-
+game:GetService("ReplicatedStorage").Events.Local.Alert:Fire("ConstlynHub","THX for using ours script")
 -- Toggle UI: Library:Toggle()
 
 -- Function to delete objects for anti-lag
@@ -29,7 +29,13 @@ function deleteForAntiLags()
             getgenv().onlyonetime = true
         elseif getgenv().onlyonetime then
             return
-        elseif game.PlaceId == 15812335463 or game.PlaceId == 16872617739 then
+
+        end
+    end
+end
+function deleteForAntiLags1()
+    if not getgenv().onlyonetime1 then
+if game.PlaceId == 15812335463 or game.PlaceId == 16872617739 then
     local targets = {
     workspace.Main.Kitchen:GetChildren()[17],
     workspace.Main.Kitchen.Bush_03,
@@ -56,13 +62,12 @@ function deleteForAntiLags()
             obj:Destroy()
         end
     end
-            getgenv().onlyonetime = true
-        elseif getgenv().onlyonetime then
+            getgenv().onlyonetime1 = true
+        elseif getgenv().onlyonetime1 then
             return
         end
     end
 end
-
 -- Function to handle anti-lag by cleaning player-generated models
 function antiLags()
     for _, player in pairs(game:GetService("Players"):GetPlayers()) do
@@ -183,7 +188,9 @@ Section:Toggle({
         getgenv().antilag = state
         if getgenv().antilag then
             deleteForAntiLags()
+            deleteForAntiLags1()
             getgenv().onlyonetime = true
+            getgenv().onlyonetime1 = true
             if not getgenv().antilagConnection then
                 getgenv().antilagConnection = game:GetService("RunService").Heartbeat:Connect(function()
                     if getgenv().antilag then
