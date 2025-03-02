@@ -2164,7 +2164,7 @@ Util.Tween(toggleCircle, {
         
         local hueCorner = Util.Create("UICorner", {
             CornerRadius = UDim.new(0, 4),
-            Parent = hueSl
+            Parent = hueSl,
             Name = "Cursor",
             AnchorPoint = Vector2.new(0.5, 0.5),
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
