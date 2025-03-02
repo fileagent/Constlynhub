@@ -229,9 +229,10 @@ Section:Toggle({
             if not getgenv().autocratesConnection then
                 getgenv().autocratesConnection = game:GetService("RunService").Heartbeat:Connect(function()
                     if getgenv().autocrates then
-                        local foodItems = {"Burger", "Salad", "Soda", "Fries"}
+                        local foodItems = {"Burger", "Salad", "Soda", "Fries","Drinks","Pastery","Donut","Cake","Sushi","Nigiri","Ramen","Japanese_Drink"}
+                        local namerestourant = {"Diner","Bakery","Japanese"}
                         for _, item in ipairs(foodItems) do
-                            local args = { "Diner", item, "Money" }
+                            local args = { namerestourant, item, "Money" }
                             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("AttemptCrate"):InvokeServer(unpack(args))
                         end
                     else
