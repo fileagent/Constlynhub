@@ -220,7 +220,7 @@ Section:Toggle({
     end
 })
 Section:Dropdown({
-    text = "Dropdown",
+    text = "Select Crate",
     list = {"Diner", "Bakery", "Japanese"},
     default = "Diner",
     callback = function(selected)
