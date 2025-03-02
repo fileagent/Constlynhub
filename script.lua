@@ -5,6 +5,7 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/filea
 -- Function to delete objects for anti-lag
 function deleteForAntiLags()
     if not getgenv().onlyonetime then
+    if game.PlaceId == 15812335463 or game.PlaceId == 16872617739 then
     local targets = {
         workspace.Main.Kitchen.Buns,
         workspace.Main.Kitchen:GetChildren()[6],
@@ -28,6 +29,37 @@ function deleteForAntiLags()
             getgenv().onlyonetime = true
         elseif getgenv().onlyonetime then
             return
+        elseif game.PlaceId == 15812335463 or game.PlaceId == 16872617739 then
+    local targets = {
+    workspace.Main.Kitchen:GetChildren()[17],
+    workspace.Main.Kitchen.Bush_03,
+    workspace.Main.Kitchen:GetChildren()[19],
+    workspace.Main.Kitchen:GetChildren()[18],
+    workspace.Main.Kitchen.Japanese_Drink,
+    workspace.Main.Kitchen:GetChildren()[9],
+    workspace.Main.Kitchen.MeatPrep,
+    workspace.Main.Kitchen:GetChildren()[13],
+    workspace.Main.Kitchen:GetChildren()[12],
+    workspace.Main.Kitchen.NigiriPrep,
+    workspace.Main.Kitchen:GetChildren()[2],
+    workspace.Main.Kitchen.Plate,
+    workspace.Main.Kitchen.RamenKit,
+    workspace.Main.Kitchen.Stove,
+    workspace.Main.Kitchen:GetChildren()[20],
+    workspace.Main.Kitchen:GetChildren()[11],
+    workspace.Main.Kitchen.SushiPrep,
+    workspace.Main.Kitchen.Trash,
+    workspace.Main.Kitchen.UncutMeat,
+}
+    for _, obj in ipairs(targets) do
+        if obj then
+            obj:Destroy()
+        end
+    end
+            getgenv().onlyonetime = true
+        elseif getgenv().onlyonetime then
+            return
+        end
     end
 end
 
@@ -71,7 +103,7 @@ function autoFarmOrders()
             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("GiveBot"):InvokeServer(bossLocation)
         end
    elseif game.PlaceId == 71853648817494 or game.PlaceId == 16819089066 then
-              local foodItems = {"Ramen", "Japanese_Drink", "Sushi"}
+              local foodItems = {"Ramen", "Japanese_Drink", "Sushi","Nigiri"}
         for _, location in pairs(workspace.Main.BotFolder.Locations:GetChildren()) do
             for _, item in ipairs(foodItems) do
                 local args = { [1] = item, [2] = 16232900 }
