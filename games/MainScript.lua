@@ -1,5 +1,5 @@
 local Constlynhub = {
-    [6569830174] = 'https://ronika2.pythonanywhere.com/lemonfunky.lua',
+    [682912579] = 'https://ronika2.pythonanywhere.com/lemonfunky.lua',
 }
 
-loadstring(game:HttpGet(Constlynhub[game.PlaceId]))()
+loadstring(game:HttpGet(Constlynhub[game.CreatorId]))()
