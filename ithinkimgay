@@ -1,0 +1,571 @@
+local player = game:GetService("Players").LocalPlayer
+local tweenService = game:GetService("TweenService")
+local runService = game:GetService("RunService")
+local lighting = game:GetService("Lighting")
+local debris = game:GetService("Debris")
+
+-- ✨ Visual Enhancement Settings ✨
+local COLORS = {
+    BACKGROUND = Color3.fromRGB(20, 20, 32),
+    HEADER = Color3.fromRGB(30, 30, 55),
+    ACCENT1 = Color3.fromRGB(140, 90, 255), -- Vibrant Purple
+    ACCENT2 = Color3.fromRGB(90, 210, 255), -- Bright Cyan
+    GOLD = Color3.fromRGB(255, 230, 30),
+    TEXT_PRIMARY = Color3.fromRGB(255, 255, 255),
+    TEXT_SECONDARY = Color3.fromRGB(200, 200, 240),
+    LEVEL_COLOR = Color3.fromRGB(255, 235, 70),
+    MONEY_COLOR = Color3.fromRGB(70, 255, 140),
+}
+
+-- Create the main ScreenGui with enhanced properties
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "GodlyStatsUI"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Create the main frame with enhanced styling
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 240, 0, 140)
+mainFrame.Position = UDim2.new(0.02, 0, 0.08, 0)
+mainFrame.BackgroundColor3 = COLORS.BACKGROUND
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+-- Add stylized rounded corners
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 16)
+corner.Parent = mainFrame
+
+-- Add animated gradient with enhanced colors
+local gradient = Instance.new("UIGradient")
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, COLORS.BACKGROUND),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(40, 40, 65)),
+    ColorSequenceKeypoint.new(1, COLORS.BACKGROUND)
+})
+gradient.Rotation = 45
+gradient.Parent = mainFrame
+
+-- Add outer glow effect
+local outerGlow = Instance.new("UIStroke")
+outerGlow.Color = COLORS.ACCENT1
+outerGlow.Thickness = 3
+outerGlow.Transparency = 0.6
+outerGlow.Parent = mainFrame
+
+-- Create header with cosmic design
+local headerFrame = Instance.new("Frame")
+headerFrame.Name = "HeaderFrame"
+headerFrame.Size = UDim2.new(1, 0, 0, 36)
+headerFrame.BackgroundColor3 = COLORS.HEADER
+headerFrame.BorderSizePixel = 0
+headerFrame.Parent = mainFrame
+
+-- Add rounded corners to header
+local headerCorner = Instance.new("UICorner")
+headerCorner.CornerRadius = UDim.new(0, 16)
+headerCorner.Parent = headerFrame
+
+-- Add header accent line
+local headerAccent = Instance.new("Frame")
+headerAccent.Name = "HeaderAccent"
+headerAccent.Size = UDim2.new(0.9, 0, 0, 3)
+headerAccent.Position = UDim2.new(0.05, 0, 0.9, 0)
+headerAccent.BackgroundColor3 = COLORS.ACCENT1
+headerAccent.BorderSizePixel = 0
+headerAccent.Parent = headerFrame
+
+-- Add header gradient
+local headerGradient = Instance.new("UIGradient")
+headerGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, COLORS.ACCENT1),
+    ColorSequenceKeypoint.new(0.5, COLORS.ACCENT2),
+    ColorSequenceKeypoint.new(1, COLORS.ACCENT1)
+})
+headerGradient.Parent = headerAccent
+
+-- Add title text with enhanced styling
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 1, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+titleLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+titleLabel.Text = "⚡ PLAYER STATS ⚡"
+titleLabel.Font = Enum.Font.Bangers
+titleLabel.TextColor3 = COLORS.TEXT_PRIMARY
+titleLabel.TextSize = 22
+titleLabel.Parent = headerFrame
+
+-- Add glow effect to title
+local titleGlow = Instance.new("UIStroke")
+titleGlow.Color = COLORS.ACCENT2
+titleGlow.Thickness = 1.5
+titleGlow.Transparency = 0.5
+titleGlow.Parent = titleLabel
+
+-- Create level display with enhanced visuals
+local levelFrame = Instance.new("Frame")
+levelFrame.Name = "LevelFrame"
+levelFrame.Size = UDim2.new(0.92, 0, 0, 38)
+levelFrame.Position = UDim2.new(0.04, 0, 0.33, 0)
+levelFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 70)
+levelFrame.BorderSizePixel = 0
+levelFrame.Parent = mainFrame
+
+-- Add rounded corners to level frame
+local levelCorner = Instance.new("UICorner")
+levelCorner.CornerRadius = UDim.new(0, 12)
+levelCorner.Parent = levelFrame
+
+-- Add level frame gradient
+local levelFrameGradient = Instance.new("UIGradient")
+levelFrameGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(55, 55, 85)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(40, 40, 65))
+})
+levelFrameGradient.Rotation = 90
+levelFrameGradient.Parent = levelFrame
+
+-- Add level icon with pulse effect
+local levelIcon = Instance.new("ImageLabel")
+levelIcon.Name = "LevelIcon"
+levelIcon.Size = UDim2.new(0, 28, 0, 28)
+levelIcon.Position = UDim2.new(0.05, 0, 0.5, -14)
+levelIcon.BackgroundTransparency = 1
+levelIcon.AnchorPoint = Vector2.new(0, 0.5)
+levelIcon.Position = UDim2.new(0.05, 0, 0.5, 0)
+levelIcon.Image = "rbxassetid://7733715400" -- Star icon
+levelIcon.ImageColor3 = COLORS.LEVEL_COLOR
+levelIcon.Parent = levelFrame
+
+-- Add level text label with Bangers font
+local levelLabel = Instance.new("TextLabel")
+levelLabel.Name = "LevelLabel"
+levelLabel.Size = UDim2.new(0, 70, 0, 30)
+levelLabel.Position = UDim2.new(0.18, 0, 0.5, -15)
+levelLabel.BackgroundTransparency = 1
+levelLabel.AnchorPoint = Vector2.new(0, 0.5)
+levelLabel.Position = UDim2.new(0.18, 0, 0.5, 0)
+levelLabel.Text = "LEVEL:"
+levelLabel.Font = Enum.Font.Bangers
+levelLabel.TextColor3 = COLORS.TEXT_SECONDARY
+levelLabel.TextSize = 20
+levelLabel.TextXAlignment = Enum.TextXAlignment.Left
+levelLabel.Parent = levelFrame
+
+-- Create container for level value with fixed positioning
+local levelValueContainer = Instance.new("Frame")
+levelValueContainer.Name = "LevelValueContainer"
+levelValueContainer.Size = UDim2.new(0, 100, 0, 30)
+levelValueContainer.AnchorPoint = Vector2.new(1, 0.5)
+levelValueContainer.Position = UDim2.new(0.95, 0, 0.5, 0)
+levelValueContainer.BackgroundTransparency = 1
+levelValueContainer.ClipsDescendants = true
+levelValueContainer.Parent = levelFrame
+
+-- Add level value label with enhanced styling and proper anchoring
+local levelValue = Instance.new("TextLabel")
+levelValue.Name = "LevelValue"
+levelValue.Size = UDim2.new(1, 0, 1, 0)
+levelValue.Position = UDim2.new(0, 0, 0, 0)
+levelValue.BackgroundTransparency = 1
+levelValue.AnchorPoint = Vector2.new(1, 0.5)
+levelValue.Position = UDim2.new(1, 0, 0.5, 0)
+levelValue.Text = "0"
+levelValue.Font = Enum.Font.Bangers
+levelValue.TextColor3 = COLORS.LEVEL_COLOR
+levelValue.TextSize = 26
+levelValue.TextXAlignment = Enum.TextXAlignment.Right
+levelValue.Parent = levelValueContainer
+
+-- Add glow to level value
+local levelValueGlow = Instance.new("UIStroke")
+levelValueGlow.Color = COLORS.LEVEL_COLOR
+levelValueGlow.Thickness = 1.2
+levelValueGlow.Transparency = 0.6
+levelValueGlow.Parent = levelValue
+
+-- Create money display with enhanced visuals
+local moneyFrame = Instance.new("Frame")
+moneyFrame.Name = "MoneyFrame"
+moneyFrame.Size = UDim2.new(0.92, 0, 0, 38)
+moneyFrame.Position = UDim2.new(0.04, 0, 0.65, 0)
+moneyFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 70)
+moneyFrame.BorderSizePixel = 0
+moneyFrame.Parent = mainFrame
+
+-- Add rounded corners to money frame
+local moneyCorner = Instance.new("UICorner")
+moneyCorner.CornerRadius = UDim.new(0, 12)
+moneyCorner.Parent = moneyFrame
+
+-- Add money frame gradient
+local moneyFrameGradient = Instance.new("UIGradient")
+moneyFrameGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(55, 55, 85)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(40, 40, 65))
+})
+moneyFrameGradient.Rotation = 90
+moneyFrameGradient.Parent = moneyFrame
+
+-- Add money icon with glow
+local moneyIcon = Instance.new("ImageLabel")
+moneyIcon.Name = "MoneyIcon"
+moneyIcon.Size = UDim2.new(0, 28, 0, 28)
+moneyIcon.AnchorPoint = Vector2.new(0, 0.5)
+moneyIcon.Position = UDim2.new(0.05, 0, 0.5, 0)
+moneyIcon.BackgroundTransparency = 1
+moneyIcon.Image = "rbxassetid://7734053495" -- Coin icon
+moneyIcon.ImageColor3 = COLORS.MONEY_COLOR
+moneyIcon.Parent = moneyFrame
+
+-- Add money text label with Bangers font
+local moneyLabel = Instance.new("TextLabel")
+moneyLabel.Name = "MoneyLabel"
+moneyLabel.Size = UDim2.new(0, 70, 0, 30)
+moneyLabel.AnchorPoint = Vector2.new(0, 0.5)
+moneyLabel.Position = UDim2.new(0.18, 0, 0.5, 0)
+moneyLabel.BackgroundTransparency = 1
+moneyLabel.Text = "MONEY:"
+moneyLabel.Font = Enum.Font.Bangers
+moneyLabel.TextColor3 = COLORS.TEXT_SECONDARY
+moneyLabel.TextSize = 20
+moneyLabel.TextXAlignment = Enum.TextXAlignment.Left
+moneyLabel.Parent = moneyFrame
+
+-- Create container for money value with fixed positioning
+local moneyValueContainer = Instance.new("Frame")
+moneyValueContainer.Name = "MoneyValueContainer"
+moneyValueContainer.Size = UDim2.new(0, 100, 0, 30)
+moneyValueContainer.AnchorPoint = Vector2.new(1, 0.5)
+moneyValueContainer.Position = UDim2.new(0.95, 0, 0.5, 0)
+moneyValueContainer.BackgroundTransparency = 1
+moneyValueContainer.ClipsDescendants = true
+moneyValueContainer.Parent = moneyFrame
+
+-- Add money value label with enhanced styling and proper anchoring
+local moneyValue = Instance.new("TextLabel")
+moneyValue.Name = "MoneyValue"
+moneyValue.Size = UDim2.new(1, 0, 1, 0)
+moneyValue.Position = UDim2.new(0, 0, 0, 0)
+moneyValue.BackgroundTransparency = 1
+moneyValue.AnchorPoint = Vector2.new(1, 0.5)
+moneyValue.Position = UDim2.new(1, 0, 0.5, 0)
+moneyValue.Text = "$0"
+moneyValue.Font = Enum.Font.Bangers
+moneyValue.TextColor3 = COLORS.MONEY_COLOR
+moneyValue.TextSize = 26
+moneyValue.TextXAlignment = Enum.TextXAlignment.Right
+moneyValue.Parent = moneyValueContainer
+
+-- Add glow to money value
+local moneyValueGlow = Instance.new("UIStroke")
+moneyValueGlow.Color = COLORS.MONEY_COLOR
+moneyValueGlow.Thickness = 1.2
+moneyValueGlow.Transparency = 0.6
+moneyValueGlow.Parent = moneyValue
+
+-- Add enhanced drop shadow
+local shadow = Instance.new("ImageLabel")
+shadow.Name = "Shadow"
+shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+shadow.Size = UDim2.new(1, 36, 1, 36)
+shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+shadow.BackgroundTransparency = 1
+shadow.Image = "rbxassetid://6015897843"
+shadow.ImageColor3 = Color3.new(0, 0, 0)
+shadow.ImageTransparency = 0.5
+shadow.ScaleType = Enum.ScaleType.Slice
+shadow.SliceCenter = Rect.new(49, 49, 450, 450)
+shadow.ZIndex = -1
+shadow.Parent = mainFrame
+
+-- Create particle effects container
+local particleContainer = Instance.new("Frame")
+particleContainer.Name = "ParticleContainer"
+particleContainer.Size = UDim2.new(1, 0, 1, 0)
+particleContainer.BackgroundTransparency = 1
+particleContainer.ClipsDescendants = true
+particleContainer.Parent = mainFrame
+
+-- Enhanced animations and effects
+spawn(function()
+    -- Gradient animation with wave effect
+    local rotationSpeed = 0.2
+    local colorShift = 0
+    local iconScale = 0
+    
+    while true do
+        -- Animate gradient rotation
+        gradient.Rotation = (gradient.Rotation + rotationSpeed) % 360
+        
+        -- Pulse border effect
+        local pulse = math.sin(tick() * 2) * 0.3 + 0.7
+        outerGlow.Transparency = pulse
+        
+        -- Pulse icons
+        iconScale = math.sin(tick() * 2.5) * 0.1 + 1
+        levelIcon.Size = UDim2.new(0, 28 * iconScale, 0, 28 * iconScale)
+        moneyIcon.Size = UDim2.new(0, 28 * iconScale, 0, 28 * iconScale)
+        
+        -- Shift header accent colors
+        colorShift = (colorShift + 0.003) % 1
+        headerGradient.Offset = Vector2.new(colorShift, 0)
+        
+        -- Create occasional sparkle effect
+        if math.random(1, 100) == 1 then
+            local sparkle = Instance.new("Frame")
+            sparkle.Size = UDim2.new(0, math.random(3, 5), 0, math.random(3, 5))
+            sparkle.Position = UDim2.new(math.random()/1.2, 0, math.random()/1.2, 0)
+            sparkle.BackgroundColor3 = COLORS.GOLD
+            sparkle.BackgroundTransparency = 0.2
+            sparkle.Parent = particleContainer
+            
+            local sparkleCorner = Instance.new("UICorner")
+            sparkleCorner.CornerRadius = UDim.new(1, 0)
+            sparkleCorner.Parent = sparkle
+            
+            -- Animate and remove sparkle
+            tweenService:Create(
+                sparkle,
+                TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                {
+                    Size = UDim2.new(0, 0, 0, 0),
+                    BackgroundTransparency = 1,
+                    Position = UDim2.new(sparkle.Position.X.Scale + 0.1, 0, sparkle.Position.Y.Scale - 0.1, 0)
+                }
+            ):Play()
+            
+            debris:AddItem(sparkle, 0.8)
+        end
+        
+        wait(0.01)
+    end
+end)
+
+-- Function to format numbers with K, M, B notation
+local function formatNumber(number)
+    if number >= 1000000000 then
+        return string.format("%.1fB", number / 1000000000)
+    elseif number >= 1000000 then
+        return string.format("%.1fM", number / 1000000)
+    elseif number >= 1000 then
+        return string.format("%.1fK", number / 1000)
+    else
+        return tostring(number)
+    end
+end
+
+-- Enhanced pulse animation with multiple effects when values change
+local function pulseAnimation(valueLabel, oldValue, newValue)
+    if tonumber(newValue) > tonumber(oldValue) then
+        -- Create vibrant animation clone
+        local animClone = valueLabel:Clone()
+        animClone.Parent = valueLabel.Parent
+        animClone.ZIndex = valueLabel.ZIndex + 1
+        animClone.TextTransparency = 0
+        
+        -- Add shine effect
+        local shine = Instance.new("Frame")
+        shine.Size = UDim2.new(0.05, 0, 2, 0)
+        shine.BackgroundColor3 = Color3.new(1, 1, 1)
+        shine.BackgroundTransparency = 0.6
+        shine.BorderSizePixel = 0
+        shine.ZIndex = valueLabel.ZIndex + 2
+        shine.Rotation = 45
+        shine.Position = UDim2.new(-0.1, 0, -0.5, 0)
+        shine.Parent = valueLabel.Parent
+        
+        -- Animate the shine
+        tweenService:Create(
+            shine,
+            TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {
+                Position = UDim2.new(1.1, 0, -0.5, 0),
+                BackgroundTransparency = 1
+            }
+        ):Play()
+        
+        -- Animate the value clone
+        local upTween = tweenService:Create(
+            animClone,
+            TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+            {
+                Position = UDim2.new(1, 0, -0.7, 0),
+                TextTransparency = 1,
+                TextSize = valueLabel.TextSize * 1.5
+            }
+        )
+        
+        upTween:Play()
+        
+        -- Remove clones after animation
+        upTween.Completed:Connect(function()
+            animClone:Destroy()
+            shine:Destroy()
+        end)
+        
+        -- Create number increment particles
+        local difference = tonumber(newValue) - tonumber(oldValue)
+        local incrementText = "+"
+        if difference >= 1000000000 then
+            incrementText = incrementText..string.format("%.1fB", difference / 1000000000)
+        elseif difference >= 1000000 then
+            incrementText = incrementText..string.format("%.1fM", difference / 1000000)
+        elseif difference >= 1000 then
+            incrementText = incrementText..string.format("%.1fK", difference / 1000)
+        else
+            incrementText = incrementText..tostring(difference)
+        end
+        
+        local incrementLabel = Instance.new("TextLabel")
+        incrementLabel.Size = UDim2.new(0, 100, 0, 20)
+        incrementLabel.Position = UDim2.new(0.9, 0, 0.5, 0)
+        incrementLabel.AnchorPoint = Vector2.new(1, 0.5)
+        incrementLabel.BackgroundTransparency = 1
+        incrementLabel.Font = Enum.Font.Bangers
+        incrementLabel.TextColor3 = Color3.new(1, 1, 0.5)
+        incrementLabel.TextSize = 18
+        incrementLabel.Text = incrementText
+        incrementLabel.TextXAlignment = Enum.TextXAlignment.Right
+        incrementLabel.Parent = valueLabel.Parent
+        
+        -- Animate increment label
+        tweenService:Create(
+            incrementLabel,
+            TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {
+                Position = UDim2.new(0.9, 0, 0, 0),
+                TextTransparency = 1
+            }
+        ):Play()
+        
+        debris:AddItem(incrementLabel, 0.6)
+        
+        -- Enhanced shake effect on the original
+        local originalPos = valueLabel.Position
+        local shake = {
+            UDim2.new(1, 2, 0.5, 0),
+            UDim2.new(1, -2, 0.5, 1),
+            UDim2.new(1, 1, 0.5, -1),
+            UDim2.new(1, -1, 0.5, -2),
+            UDim2.new(1, 2, 0.5, 2),
+            UDim2.new(1, 0, 0.5, 0)
+        }
+        
+        spawn(function()
+            for i = 1, #shake do
+                valueLabel.Position = shake[i]
+                wait(0.02)
+            end
+            valueLabel.Position = originalPos
+        end)
+        
+        -- Flash effect on the container
+        local originalColor = valueLabel.TextColor3
+        valueLabel.TextColor3 = Color3.new(1, 1, 1)
+        wait(0.05)
+        valueLabel.TextColor3 = originalColor
+    end
+end
+
+-- Function to update the UI with player values
+local prevLevel = 0
+local prevMoney = 0
+
+local function updateUI()
+    if player and player:FindFirstChild("Values") then
+        local values = player.Values
+        
+        if values:FindFirstChild("Level") and values:FindFirstChild("Money") then
+            local currentLevel = values.Level.Value
+            local currentMoney = values.Money.Value
+            
+            -- Format the values for display
+            local formattedLevel = formatNumber(currentLevel)
+            local formattedMoney = "$" .. formatNumber(currentMoney)
+            
+            -- Update the display
+            levelValue.Text = formattedLevel
+            moneyValue.Text = formattedMoney
+            
+            -- Check if values have changed and animate
+            if currentLevel ~= prevLevel then
+                pulseAnimation(levelValue, prevLevel, currentLevel)
+                prevLevel = currentLevel
+            end
+            
+            if currentMoney ~= prevMoney then
+                pulseAnimation(moneyValue, prevMoney, currentMoney)
+                prevMoney = currentMoney
+            end
+        end
+    end
+end
+
+-- Enhanced draggable frame with smooth transitions
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    local targetPosition = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    
+    -- Smooth tween for dragging
+    tweenService:Create(
+        mainFrame,
+        TweenInfo.new(0.05, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        {Position = targetPosition}
+    ):Play()
+end
+
+headerFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        
+        -- Visual feedback when dragging starts
+        tweenService:Create(
+            headerFrame, 
+            TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {BackgroundColor3 = COLORS.ACCENT1:Lerp(COLORS.HEADER, 0.7)}
+        ):Play()
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+                
+                -- Visual feedback when dragging ends
+                tweenService:Create(
+                    headerFrame, 
+                    TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {BackgroundColor3 = COLORS.HEADER}
+                ):Play()
+            end
+        end)
+    end
+end)
+
+headerFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+runService.RenderStepped:Connect(function()
+    if dragging and dragInput then
+        update(dragInput)
+    end
+end)
+
+-- Connect update function to run repeatedly
+while true do
+    updateUI()
+    wait(0.1)
+end
