@@ -152,6 +152,9 @@ function autoFarmOrders()
         end
     end
 end
+function autofarmordersv2()
+return
+end
 
 -- Creating GUI with sections, functionality, and controls
 local Window = Library:Window({ text = "ConstlynHub" })
@@ -165,17 +168,110 @@ local Tab = TabSection:Tab({
 local Section = Tab:Section({ text = "Features" })
 
 Section:Button({
-    text = "Teleport to Unreleased Bakery 🎁",
+    text = "Teleport to Unreleased Dinner 🎁",
     callback = function()
         game:GetService("TeleportService"):Teleport(15989668274)
     end,
 })
 
 Section:Button({
-    text = "Teleport To Unreleased Dinner 🎁",
+    text = "Teleport To Unreleased Bakery 🎁",
     callback = function()
         game:GetService("TeleportService"):Teleport(16142203369)
     end,
+})
+Section:Toggle({
+    text = "AutoFarm V2[Better wifi]✨",
+    state = false,
+    callback = function(state)
+        getgenv().AutofarmV2 = state
+        
+        if getgenv().AutofarmV2 then
+            coroutine.wrap(function()
+                while getgenv().AutofarmV2 do
+                    game:GetService("RunService").heartbeat:Wait()
+                    
+                    -- Process regular bot locations
+                    for _, location in pairs(workspace.Main.BotFolder.Locations:GetChildren()) do
+                        for _, bot in pairs(location:GetChildren()) do 
+                            if bot:IsA("Model") and bot:FindFirstChild("HumanoidRootPart") then
+                                if (bot.HumanoidRootPart.Position - location.Hitbox.Position).Magnitude < 5 then
+                                    local orderFolder = bot:FindFirstChildWhichIsA("Folder")
+                                    if orderFolder then
+                                        for _, order in pairs(orderFolder:GetChildren()) do
+                                            local itemName = order.Name
+                                            
+                                            if itemName ~= "Anything" then
+                                                local args = { [1] = itemName, [2] = 16232900 }
+                                                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("SetHolding"):InvokeServer(unpack(args))
+                                                
+                                                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("GiveBot"):InvokeServer(location)
+
+                                            else
+                                                -- Handle "Anything" order type with a default item
+                                                local defaultItem = "Salad"
+                                                if game.PlaceId == 16819089066 or game.PlaceId == 16873261961 then
+                                                    defaultItem = game.PlaceId == 16819089066 and "Sushi" or "Cake"
+                                                end
+                                                
+                                                local args = { [1] = defaultItem, [2] = 16232900 }
+                                                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("SetHolding"):InvokeServer(unpack(args))
+
+                                                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("GiveBot"):InvokeServer(location)
+
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    
+                    -- Process boss location
+                    local bossLocation = workspace.Main.BotFolder.BossLocation
+                    for _, bot in pairs(bossLocation:GetChildren()) do 
+                        if bot:IsA("Model") and bot:FindFirstChild("HumanoidRootPart") then
+                            if (bot.HumanoidRootPart.Position - bossLocation.Hitbox.Position).Magnitude < 10 then
+                                local orderFolder = bot:FindFirstChildWhichIsA("Folder")
+                                if orderFolder then
+                                    for _, order in pairs(orderFolder:GetChildren()) do
+                                        local itemName = order.Name
+                                        
+                                        if itemName ~= "Anything" then
+                                            local args = { [1] = itemName, [2] = 16232900 }
+                                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("SetHolding"):InvokeServer(unpack(args))
+                                           
+                                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("GiveBot"):InvokeServer(bossLocation)
+
+                                        else
+                                            -- Handle "Anything" order type with a default item for boss
+                                            local defaultItem = "Salad"
+                                            if game.PlaceId == 16819089066 or game.PlaceId == 16873261961 then
+                                                defaultItem = game.PlaceId == 16819089066 and "Sushi" or "Cake"
+                                            end
+                                            
+                                            local args = { [1] = defaultItem, [2] = 16232900 }
+                                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("SetHolding"):InvokeServer(unpack(args))
+                                           
+                                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("GiveBot"):InvokeServer(bossLocation)
+
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    
+                    -- Clean tables in a separate thread to not delay the main loop
+                    task.spawn(function()
+                        for _, table in pairs(workspace.Main.BotFolder.Tables:GetChildren()) do
+                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("InteractTable"):InvokeServer(table)
+                        end
+                    end)
+                end
+            end)()
+        end
+    end
 })
 
 Section:Toggle({
@@ -285,4 +381,39 @@ Section:Toggle({
             getgenv().autocratesConnection = nil
         end
     end
+})
+
+-- Add additional utility functions
+local UtilitySection = Tab:Section({ text = "Utilities" })
+
+UtilitySection:Button({
+    text = "Instant Cleanup Tables",
+    callback = function()
+        for _, table in pairs(workspace.Main.BotFolder.Tables:GetChildren()) do
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Remote"):WaitForChild("InteractTable"):InvokeServer(table)
+        end
+    end
+})
+
+UtilitySection:Button({
+    text = "Refresh UI",
+    callback = function()
+        Library:Toggle()
+        task.wait(0.5)
+        Library:Toggle()
+    end
+})
+
+-- Credits section
+local CreditsSection = Tab:Section({ text = "Credits" })
+
+-- Use TextBox or Button instead of Label since Label isn't implemented
+CreditsSection:Button({
+    text = "Script by ConstlynHub Team",
+    callback = function() end -- Empty callback
+})
+
+CreditsSection:Button({
+    text = "Updated: March 2025",
+    callback = function() end -- Empty callback
 })
