@@ -1,4 +1,3 @@
-
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/source.lua"))()
 -- Toggle UI: Library:Toggle()
 
@@ -59,7 +58,76 @@ Section:Toggle({
 })
 
 Section:Toggle({
-    text = "Guard/Police Esp",
+    text = "Inf Stamina 🏃‍♂️",
+    state = false,
+    callback = function(state)
+        getgenv().InfStamina = state
+        
+        if getgenv().InfStamina then
+            coroutine.wrap(function()
+                local plr = game.Players.LocalPlayer.Name
+                local v = game:GetService("Workspace").Criminals[plr]
+                
+                while getgenv().InfStamina do
+                    v.MaxStamina.Value = 10000
+                    v.Stamina.Value = 10000
+                    task.wait(0.1)
+                end
+                
+                -- Reset to default when toggled off
+                v.MaxStamina.Value = 100
+                v.Stamina.Value = 100
+            end)()
+        end
+    end
+})
+
+Section:Toggle({
+    text = "Remove Glass 🎫",
+    state = false,
+    callback = function(state)
+        getgenv().RemoveGlass = state
+        
+        if getgenv().RemoveGlass then
+            coroutine.wrap(function()
+                while getgenv().RemoveGlass do
+                    for i,v in pairs(game:GetService("Workspace").Glass:GetChildren()) do
+                        if v.Name == 'Glass' then
+                            v:Destroy()
+                        end
+                    end
+                    task.wait(0.5)  -- Prevent potential issues with rapid destruction
+                end
+            end)()
+        end
+    end
+})
+
+Section:Toggle({
+    text = "TP Bags to Van 💰",
+    state = false,
+    callback = function(state)
+        getgenv().TPBagsToVan = state
+        
+        if getgenv().TPBagsToVan then
+            coroutine.wrap(function()
+                while getgenv().TPBagsToVan do
+                    local vanCFrame = game:GetService("Workspace").BagSecuredArea.FloorPart.CFrame
+                    for i,v in pairs(game:GetService("Workspace").Bags:GetDescendants()) do
+                        if v.Name == 'MoneyBag' then
+                            v.CFrame = vanCFrame * CFrame.new(0, 0, 10 + (i * 2))
+                        end
+                    end
+                    task.wait(0.5)  -- Prevent potential server issues
+                end
+            end)()
+        end
+    end
+})
+
+
+Section:Toggle({
+    text = "Guard/Police Esp 👮‍♀️",
     state = false,
     callback = function(boolean)
         -- Clear any existing ESP elements when toggled off
@@ -395,13 +463,13 @@ Section:Toggle({
                                     -- Add color coding based on distance
                                     local distanceText, textColor
                                     if distance <= 15 then
-                                        distanceText = "<font color='#FF5555'><b>CLOSE: " .. formattedDistance .. "</b></font>"
+                                        distanceText = "CLOSE: " .. formattedDistance .. "</b></font>"
                                         textColor = Color3.fromRGB(255, 85, 85)
                                     elseif distance <= 40 then
-                                        distanceText = "<font color='#FFAA55'><b>NEAR: " .. formattedDistance .. "</b></font>"
+                                        distanceText = "NEAR: " .. formattedDistance .. "</b></font>"
                                         textColor = Color3.fromRGB(255, 170, 85)
                                     else
-                                        distanceText = "<font color='#55FF55'><b>FAR: " .. formattedDistance .. "</b></font>"
+                                        distanceText = "FAR: " .. formattedDistance .. "</b></font>"
                                         textColor = Color3.fromRGB(85, 255, 85)
                                     end
                                     
@@ -833,10 +901,114 @@ Section:Toggle({
 })
 
 
+
+Section:Toggle({
+    text = "Auto Yell All Npc 🧑",
+    state = false,
+    callback = function(state)
+        getgenv().AutoYellAllNpc = state
+        
+        if getgenv().AutoYellAllNpc then
+            coroutine.wrap(function()
+                while getgenv().AutoYellAllNpc do
+                    pcall(function()
+                        local ohTable1 = {}
+                        
+                        -- Safely get Citizens, with error checking
+                        local citizensFolder = workspace:FindFirstChild("Citizens")
+                        if not citizensFolder then 
+                            warn("Citizens folder not found!")
+                            getgenv().AutoYellAllNpc = false
+                            return 
+                        end
+
+                        -- Carefully add models to table with type checking
+                        for _, child in pairs(citizensFolder:GetChildren()) do
+                            if child:IsA("Model") and child:FindFirstChild("Humanoid") then
+                                table.insert(ohTable1, child)
+                            end
+                        end
+
+                        -- Limit the number of NPCs to prevent overwhelming the server
+                        if #ohTable1 > 20 then
+                            ohTable1 = {unpack(ohTable1, 1, 20)}
+                        end
+
+                        -- Fire server event with safeguards
+                        local yellRemote = game:GetService("ReplicatedStorage"):FindFirstChild("RS_Package")
+                        if yellRemote then
+                            local remotes = yellRemote:FindFirstChild("Remotes")
+                            if remotes then
+                                local playerYellRemote = remotes:FindFirstChild("PlayerYell")
+                                if playerYellRemote then
+                                    playerYellRemote:FireServer(ohTable1)
+                                end
+                            end
+                        end
+                    end)
+                    
+                    -- Added longer wait to reduce server load
+                    task.wait(1)
+                end
+            end)()
+        end
+    end
+})
+
 Section:Button({
-    text = "Button",
+    text = "Restrain All Citizens 🎭",
     callback = function()
-        print("Clicked button")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+local function restrainCitizens()
+    local citizensFolder = workspace:WaitForChild("Citizens")
+    local allRestrained = false
+    
+    while not allRestrained do
+        allRestrained = true
+        
+        for _, citizen in pairs(citizensFolder:GetChildren()) do
+            if citizen:IsA("Model") and 
+               not citizen.Name:find("CitizenTied") and 
+               citizen:FindFirstChild("Torso") and 
+               citizen:FindFirstChild("Torso"):FindFirstChild("ProximityPrompt") then
+                
+                allRestrained = false
+                
+                -- Teleport player near the citizen
+                humanoidRootPart.CFrame = citizen.Torso.CFrame * CFrame.new(0, 0, 3)
+                wait(0.1)
+                
+                local proximityPrompt = citizen:FindFirstChild("Torso"):FindFirstChild("ProximityPrompt")
+                
+                local args = {
+                    [1] = proximityPrompt
+                }
+                
+                -- Start interaction
+                game:GetService("ReplicatedStorage"):WaitForChild("RS_Package"):WaitForChild("Remotes"):WaitForChild("StartInteraction"):FireServer(unpack(args))
+                
+                -- Complete interaction
+                game:GetService("ReplicatedStorage"):WaitForChild("RS_Package"):WaitForChild("Remotes"):WaitForChild("CompleteInteraction"):FireServer(unpack(args))
+                
+                wait(0.2) -- Small delay between citizens
+            end
+        end
+        
+        if allRestrained then
+            break
+        end
+        
+        wait(0.5) -- Wait before checking again
+    end
+    
+    print("All citizens restrained!")
+end
+
+-- Execute the function
+restrainCitizens()
     end,
 })
 
