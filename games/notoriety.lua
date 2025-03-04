@@ -1018,13 +1018,6 @@ restrainCitizens()
 -- Add this before the toggle section
 local selectedMap = "None"
 
-Section:Textbox({
-    text = "Textbox",
-    value = "Default",
-    callback = function(String)
-        print(String)
-    end
-})
 
 
 
