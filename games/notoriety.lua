@@ -2,20 +2,20 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/filea
 -- Toggle UI: Library:Toggle()
 
 local Window = Library:Window({
-    text = "Window"
+    text = "Notoriety"
 })
 
 local TabSection = Window:TabSection({
-    text = "TabSection"
+    text = "Constlynhub"
 })
 
 local Tab = TabSection:Tab({
-    text = "Tab",
+    text = "Main",
     icon = "rbxassetid://7999345313",
 })
 
 local Section = Tab:Section({
-    text = "Section"
+    text = "Main"
 })
 Section:Toggle({
     text = "Kill All Cops✨",
@@ -1013,15 +1013,7 @@ restrainCitizens()
 })
 
 
-Section:Slider({
-    text = "Slider",
-    min = 10,
-    max = 100,
-    -- [[Float = 0,]] Idk what it does
-    callback = function(number)
-        print(number)
-    end
-})
+
 
 -- Add this before the toggle section
 local selectedMap = "None"
@@ -1034,13 +1026,7 @@ Section:Textbox({
     end
 })
 
-Section:Colorpicker({
-    text = "Colorpicker",
-    color = Color3.new(1,1,1),
-    callback = function(HSV)
-        print(HSV)
-    end
-})
+
 
 --[[
     blacklisted keybind:
@@ -1050,12 +1036,3 @@ Section:Colorpicker({
         W,A,S,D,I,O
         Unknown
 ]]
-
-Section:Keybind({
-    text = "Keybind",
-    default = Enum.KeyCode.Z,
-    callback = function(defaultBind)
-        print("Triggered keybind")
-        print(defaultBind)
-    end
-})
