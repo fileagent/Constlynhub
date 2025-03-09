@@ -504,22 +504,20 @@ Section:Toggle({
 
 Section:Toggle({
     text = "Auto Solve Vents 🎲",
-    state = false, -- Default boolean
+    state = false,
     callback = function(boolean)
-        -- Store the toggle state in a variable
         _G.AutoSolveVents = boolean
         
-        -- Create a separate function that only runs when toggle is on
         if _G.AutoSolveVents then
             spawn(function()
-                while _G.AutoSolveVents do
-                    task.wait(0.1)
-                    getNil("RemoteEvent", "RemoteEvent"):FireServer()
+                while _G.AutoSolveVents and task.wait(0.1) do
+                    workspace:WaitForChild("AssetsInGameplay"):WaitForChild("HighlightGreen"):WaitForChild("MaintenancePanel"):WaitForChild("RemoteEvent"):FireServer()
                 end
             end)
         end
     end
 })
+
 
 -- Add a slider to control the proximity distance
 Section:Slider({
