@@ -640,3 +640,43 @@ end
 doPushups()
     end,
 })
+
+LobbySection:Button({
+    text = "Auto Tug ❗",
+    callback = function()
+while true do
+task.wait()
+for i=1,100 do
+for i,v in pairs(workspace.Interactives:GetChildren()) do 
+if v.Name == "RopePullMinigame" then 
+if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.Floor.Position).Magnitude < 10 then
+local args = {
+    [1] = 99
+}
+
+v:WaitForChild("RemoteEvent"):FireServer(unpack(args))
+
+end
+end
+end
+end
+end
+    end,
+})
+
+LobbySection:Button({
+    text = "Perfect Wrestle ✌",
+    callback = function()
+for i=1,10 do
+for i,v in pairs(workspace.Interactives:GetChildren()) do 
+if v.Name == "WrestleTable" then 
+if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.Table.Position).Magnitude < 10 then
+if v.Table.ProximityPrompt.Enabled == true then
+fireproximityprompt(v.Table.ProximityPrompt)
+end
+end
+end
+end
+end
+    end,
+})
