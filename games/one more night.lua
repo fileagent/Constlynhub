@@ -25,7 +25,7 @@ local Section = Tab:Section({
 })
 
 local LobbySection = Tab2:Section({
-    text = "Lobby Teleports"
+    text = "Lobby Stuff"
 })
 
 -- Function to increase proximity prompt distance
