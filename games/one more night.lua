@@ -599,3 +599,44 @@ LobbySection:Button({
         print("Auto Hammer Perfect executed!")
     end,
 })
+
+LobbySection:Button({
+    text = "Auto Pushups 👌",
+    callback = function()
+     local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
+
+local pushupCount = 0
+local maxPushups = 10000
+
+local function doPushups()
+    spawn(function()
+        while pushupCount < maxPushups do
+            for i, v in pairs(workspace.Interactives:GetChildren()) do
+                if v.Name == "PushUps" then
+                    if (rootPart.Position - v.Position).Magnitude < 1 then
+                        fireproximityprompt(v.ProximityPrompt)
+                        pushupCount = pushupCount + 1
+                        print("Pushup #" .. pushupCount .. " completed")
+                        
+                        if pushupCount >= maxPushups then
+                            print("All 100 pushups completed!")
+                            break
+                        end
+                        
+                    end
+                end
+            end
+            
+            if pushupCount >= maxPushups then
+                break
+            end
+            
+            wait()
+        end
+    end)
+end
+doPushups()
+    end,
+})
