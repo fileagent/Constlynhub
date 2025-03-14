@@ -564,7 +564,7 @@ end
 
 -- Add teleport button to Lobby section
 LobbySection:Button({
-    text = "Teleport to Secret Claim 🗝️",
+    text = "Teleport to Secret Claim Badge 🗝️",
     callback = function()
         -- Target position for teleport
         local targetCFrame = CFrame.new(
@@ -576,5 +576,26 @@ LobbySection:Button({
         
         teleportWithTween(targetCFrame)
         print("Teleporting to Secret Claim...")
+    end,
+})
+
+LobbySection:Button({
+    text = "Auto Hammer Perfect 🔨",
+    callback = function()
+        for i,v in pairs(workspace.Interactives:GetChildren()) do 
+            if v.Name == "Strongman" then 
+                if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.Screen.Position).Magnitude < 15 then
+                    local args = {
+                        [1] = "Complete",
+                        [2] = 100,
+                        [3] = 100,
+                        [4] = 100
+                    }
+
+                    v:WaitForChild("RemoteEvent"):FireServer(unpack(args))
+                end
+            end
+        end
+        print("Auto Hammer Perfect executed!")
     end,
 })
