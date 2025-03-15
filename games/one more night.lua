@@ -456,6 +456,203 @@ Section:Toggle({
     end
 })
 
+-- Auto Math Solver for Math Screen with UI Toggle
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Global variable to track toggle state
+_G.AutoMathSolverEnabled = false
+
+-- Store the connection so we can disconnect later
+local solverConnection = nil
+
+-- Function to evaluate mathematical expressions
+local function evaluateMathExpression(expression)
+    -- Handle addition
+    if string.find(expression, "+") then
+        local numbers = string.split(expression, "+")
+        return tonumber(numbers[1]) + tonumber(numbers[2])
+    -- Handle subtraction
+    elseif string.find(expression, "-") then
+        local numbers = string.split(expression, "-")
+        return tonumber(numbers[1]) - tonumber(numbers[2])
+    -- Handle multiplication
+    elseif string.find(expression, "*") or string.find(expression, "×") then
+        local numbers
+        if string.find(expression, "*") then
+            numbers = string.split(expression, "*")
+        else
+            numbers = string.split(expression, "×")
+        end
+        return tonumber(numbers[1]) * tonumber(numbers[2])
+    -- Handle division
+    elseif string.find(expression, "/") or string.find(expression, "÷") then
+        local numbers
+        if string.find(expression, "/") then
+            numbers = string.split(expression, "/")
+        else
+            numbers = string.split(expression, "÷")
+        end
+        return tonumber(numbers[1]) / tonumber(numbers[2])
+    end
+    
+    -- If no operation is found, return nil
+    return nil
+end
+
+-- Function to find the correct answer button
+local function findCorrectAnswerButton(answersFolder, correctAnswer)
+    -- Loop through all children of the Answers folder
+    for _, button in pairs(answersFolder:GetChildren()) do
+        -- Check if the object is a TextButton
+        if button:IsA("TextButton") or button:IsA("Frame") then
+            -- Get the text value if it's directly on the button
+            local buttonText = button.Text
+            
+            -- If there's no direct text, look for a TextLabel child
+            if not buttonText or buttonText == "" then
+                for _, child in pairs(button:GetDescendants()) do
+                    if child:IsA("TextLabel") and child.Text ~= "" then
+                        buttonText = child.Text
+                        break
+                    end
+                end
+            end
+            
+            -- If we found text and it matches our answer, return this button
+            if buttonText and tonumber(buttonText) == correctAnswer then
+                return button
+            end
+        end
+    end
+    
+    -- If we couldn't find a button with the exact answer, return the first button as a fallback
+    return answersFolder:FindFirstChildWhichIsA("TextButton") or answersFolder:FindFirstChildWhichIsA("Frame")
+end
+
+-- Function to get the math screen objects
+local function getMathScreen()
+    -- First try the normal path
+    local mathScreen = workspace.AssetsInGameplay.HighlightCyan.Dry.MathScreen
+    if mathScreen then
+        return mathScreen
+    end
+    
+    -- If not found, try the getNil approach
+    local function getNil(name, class)
+        for _, v in next, getnilinstances() do
+            if v.ClassName == class and v.Name == name then
+                return v
+            end
+        end
+    end
+    
+    return getNil("Dry", "Model"):WaitForChild("MathScreen")
+end
+
+-- Function to start the math solver
+local function startMathSolver()
+    -- Only start if not already running
+    if solverConnection then return end
+    
+    print("Auto Math Solver started")
+    
+    -- Main loop to check for math problems
+    solverConnection = RunService.Heartbeat:Connect(function()
+        if not _G.AutoMathSolverEnabled then
+            stopMathSolver()
+            return
+        end
+        
+        pcall(function()
+            -- Try to get the math screen
+            local mathScreen
+            local success = pcall(function()
+                mathScreen = getMathScreen()
+            end)
+            
+            if not success or not mathScreen then return end
+            
+            -- Check if the screen exists and is visible
+            local screen = mathScreen:FindFirstChild("Screen")
+            if not screen then return end
+            
+            local surfaceGui = screen:FindFirstChild("SurfaceGui")
+            if not surfaceGui then return end
+            
+            local questionLabel = surfaceGui:FindFirstChild("Question")
+            if not questionLabel then return end
+            
+            -- Get the question text
+            local questionText = questionLabel.Text
+            if not questionText or questionText == "" then return end
+            
+            -- Remove any extra spaces
+            questionText = string.gsub(questionText, "%s+", "")
+            
+            -- Calculate the answer
+            local answer = evaluateMathExpression(questionText)
+            if not answer then return end
+            
+            -- Round the answer if it's a decimal
+            answer = math.floor(answer + 0.5)
+            
+            -- Find the answers folder
+            local answersFolder = surfaceGui:FindFirstChild("Answers")
+            if not answersFolder then return end
+            
+            -- Find the correct button
+            local correctButton = findCorrectAnswerButton(answersFolder, answer)
+            if not correctButton then return end
+            
+            -- Click the button (fire the remote event)
+            local remoteEvent = mathScreen:FindFirstChild("RemoteEvent")
+            if remoteEvent then
+                remoteEvent:FireServer(correctButton)
+                print("Solved: " .. questionText .. " = " .. answer)
+                
+                -- Pause briefly to avoid solving too quickly
+                wait(0.5)
+            end
+        end)
+    end)
+end
+
+-- Function to stop the math solver
+local function stopMathSolver()
+    if solverConnection then
+        solverConnection:Disconnect()
+        solverConnection = nil
+        print("Auto Math Solver stopped")
+    end
+end
+
+-- Now here's how to add it to your UI Section with a toggle:
+
+-- UI Section Toggle Implementation
+Section:Toggle({
+    text = "Auto Math Solver 🧮", -- Cool calculator emoji
+    state = false, -- Default toggle state is off
+    callback = function(boolean)
+        -- Update the toggle state
+        _G.AutoMathSolverEnabled = boolean
+        
+        -- If enabled, start the solver
+        if _G.AutoMathSolverEnabled then
+            -- Create a new thread for the solver
+            spawn(function()
+                startMathSolver()
+            end)
+            print("Auto Math Solver enabled")
+        else
+            -- When toggled off, stop the solver
+            stopMathSolver()
+            print("Auto Math Solver disabled")
+        end
+    end
+})
+
 -- Auto Roxie toggle with improved path finding
 Section:Toggle({
     text = "Auto Solve Roxie 🎁",
