@@ -457,6 +457,40 @@ Section:Toggle({
 })
 
 Section:Toggle({
+    text = "Auto Click Chicken 🐔",
+    state = false, -- Default boolean
+    callback = function(boolean)
+        -- Store the toggle state in a variable
+        _G.AutoClickChicken = boolean
+        
+        -- Create a separate function that only runs when toggle is on
+        if _G.AutoClickChicken then
+            spawn(function()
+                while _G.AutoClickChicken do
+                    task.wait(0.1) -- Adjust click frequency as needed
+                    
+                    -- Check if the path exists
+                    local highlightGreen = workspace:FindFirstChild("AssetsInGameplay") and
+                                          workspace.AssetsInGameplay:FindFirstChild("HighlightGreen")
+                    
+                    if highlightGreen then
+                        local chicken = highlightGreen:FindFirstChild("Chicken")
+                        if chicken then
+                            local clickDetector = chicken:FindFirstChild("ClickDetector")
+                            if clickDetector then
+                                -- Found the ClickDetector, fire it
+                                fireclickdetector(clickDetector)
+                                print("Clicked chicken!")
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
+
+Section:Toggle({
     text = "Auto Remove Pillar 🧱",
     state = false, -- Default boolean
     callback = function(boolean)
