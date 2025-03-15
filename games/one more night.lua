@@ -469,6 +469,63 @@ Section:Toggle({
     end
 })
 
+-- Auto Noob Toggle Script 🤖⚡
+
+-- Global toggle variable
+_G.AutoNoobEnabled = false
+
+-- Main function to cycle through cameras
+local function runAutoNoob()
+    print("Auto Noob activated! Cycling through all cameras...")
+    
+    while _G.AutoNoobEnabled do
+        for i, v in pairs(workspace.Cameras:GetChildren()) do
+            -- Check if toggle is still on
+            if not _G.AutoNoobEnabled then
+                break
+            end
+            
+            -- Proceed only if it's a BasePart or Part
+            if v:IsA("BasePart") or v:IsA("Part") then
+                -- Turn view on
+                local args1 = {
+                    [1] = v,
+                    [2] = "ViewOn"
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Camera"):FireServer(unpack(args1))
+                
+                -- Wait briefly
+                task.wait(0.1)
+                
+                -- Turn view off
+                local args2 = {
+                    [1] = v,
+                    [2] = "ViewOff"
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Camera"):FireServer(unpack(args2))
+            end
+        end
+        
+        -- Small wait at the end of each cycle
+        task.wait(0.05)
+    end
+    
+    print("Auto Noob deactivated!")
+end
+
+-- Create toggle for UI
+Section:Toggle({
+    text = "Auto Noob 🤖⚡",
+    state = false, -- Default state is off
+    callback = function(state)
+        _G.AutoNoobEnabled = state
+        
+        if _G.AutoNoobEnabled then
+            spawn(runAutoNoob)
+        end
+    end
+})
+
 -- If you want to use this without the UI, you can call this function directly:
 -- toggleCameraSpam(true) -- To start
 -- toggleCameraSpam(false) -- To stop
