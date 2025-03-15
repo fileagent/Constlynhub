@@ -414,7 +414,7 @@ local autoRoxieEnabled = false
 
 -- Auto Clean toggle with improved path finding
 Section:Toggle({
-    text = "Auto Clean 🍴",
+    text = "Auto Clean Janitor 🍴",
     state = false, -- Default boolean
     callback = function(boolean)
         _G.AutoCleanEnabled = boolean
@@ -457,7 +457,7 @@ Section:Toggle({
 })
 
 Section:Toggle({
-    text = "Auto Click Chicken 🐔",
+    text = "Auto Isra Chicken 🐔",
     state = false, -- Default boolean
     callback = function(boolean)
         -- Store the toggle state in a variable
