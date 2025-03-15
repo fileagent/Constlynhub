@@ -456,6 +456,36 @@ Section:Toggle({
     end
 })
 
+Section:Toggle({
+    text = "Auto Remove Pillar 🧱",
+    state = false, -- Default boolean
+    callback = function(boolean)
+        -- Store the toggle state in a variable
+        _G.AutoRemovePillar = boolean
+        
+        -- Create a separate function that only runs when toggle is on
+        if _G.AutoRemovePillar then
+            spawn(function()
+                while _G.AutoRemovePillar do
+                    task.wait(0.1) -- Check every 0.1 seconds
+                    
+                    -- Check if Map exists in workspace
+                    if workspace:FindFirstChild("Map") then
+                        -- Check if Pillar exists in Map
+                        local pillar = workspace.Map:FindFirstChild("Pillar")
+                        if pillar then
+                            -- Found the pillar, remove it
+                            print("Found pillar, removing it...")
+                            pillar:Destroy()
+                            print("Pillar removed successfully!")
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
+
 -- Auto Math Solver for Math Screen with UI Toggle
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
