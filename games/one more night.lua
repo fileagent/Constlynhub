@@ -387,6 +387,92 @@ Section:Toggle({
     end
 })
 
+-- Configuration
+local switchDelay = 0.01  -- Speed of switching (adjust if needed)
+
+-- Global toggle variable
+_G.CameraSpamToggle = false
+
+-- Function to run the camera spam
+function runCameraSpam()
+    -- Check if cameras folder exists
+    local camerasFolder = workspace:FindFirstChild("Cameras")
+    if not camerasFolder then
+        print("Error: Cameras folder not found in workspace!")
+        return
+    end
+    
+    -- Check if specific cameras exist
+    local leftVent = camerasFolder:FindFirstChild("LeftVent")
+    local rightVent = camerasFolder:FindFirstChild("RightVent")
+    
+    if not leftVent then
+        print("Error: LeftVent camera not found!")
+        return
+    end
+    
+    if not rightVent then
+        print("Error: RightVent camera not found!")
+        return
+    end
+    
+    -- Get the camera event
+    local cameraEvent = game:GetService("ReplicatedStorage"):FindFirstChild("Camera")
+    if not cameraEvent then
+        print("Error: Camera event not found in ReplicatedStorage!")
+        return
+    end
+    
+    print("Starting camera spam between LeftVent and RightVent...")
+    
+    -- Main loop to spam camera switching
+    while _G.CameraSpamToggle do
+        -- Switch to left vent
+        local args1 = {
+            [1] = leftVent,
+            [2] = "ViewOn"
+        }
+        cameraEvent:FireServer(unpack(args1))
+        
+        -- Small wait to prevent overloading
+        task.wait(switchDelay)
+        
+        -- Switch to right vent
+        local args2 = {
+            [1] = rightVent,
+            [2] = "ViewOn"
+        }
+        cameraEvent:FireServer(unpack(args2))
+        
+        -- Small wait to prevent overloading
+        task.wait(switchDelay)
+    end
+    
+    print("Camera spam stopped.")
+end
+
+-- Create the toggle function
+local function toggleCameraSpam(state)
+    _G.CameraSpamToggle = state
+    
+    if _G.CameraSpamToggle then
+        spawn(runCameraSpam)
+    end
+end
+
+-- Example usage with a toggle UI
+Section:Toggle({
+    text = "Auto FMNOOB 🎯",
+    state = false, -- Default boolean
+    callback = function(boolean)
+        toggleCameraSpam(boolean)
+    end
+})
+
+-- If you want to use this without the UI, you can call this function directly:
+-- toggleCameraSpam(true) -- To start
+-- toggleCameraSpam(false) -- To stop
+
 Section:Toggle({
     text = "Auto Solve Puppet/Power 🤡",
     state = false, -- Default boolean
