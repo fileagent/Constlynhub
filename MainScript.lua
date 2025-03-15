@@ -13,6 +13,7 @@ local Constlynhub = {
     [682912579] = 'https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/orderup.lua',
     [8918098] = 'https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/notoriety.lua',
     [82029620] = 'https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/one%20more%20night.lua',
+    [5353743] = 'https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/one%20more%20night.lua',
 }
 
 local gamechecker = { -- i add this because the group had diff game
