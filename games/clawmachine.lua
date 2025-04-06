@@ -33,7 +33,7 @@ Section:Toggle({
         
         if getgenv().AutoFightForBoss then
             coroutine.wrap(function()
-                while getgenv().AutofarmV2 do
+                while getgenv().AutoFightForBoss do
                 game:GetService("RunService").heartbeat:Wait()
 for i=1,3 do 
 local args = {
@@ -52,11 +52,11 @@ Section:Toggle({
     text = "AutoPlushie(Useless)",
     state = false, -- Default boolean
     callback = function(boolean)
-        getgenv().AutoFightForBoss = boolean
+        getgenv().AutoPlushie = boolean
         
-        if getgenv().AutoFightForBoss then
+        if getgenv().AutoPlushie then
             coroutine.wrap(function()
-                while getgenv().AutofarmV2 do
+                while getgenv().AutoPlushie do
                 game:GetService("RunService").heartbeat:Wait()
 
     local CurrentZone = localPlayer:GetAttribute("CurrentZone")
