@@ -33,7 +33,7 @@ end)
 
 -- Tween loop logic
 local tweenInfo = TweenInfo.new(
-    2.3,
+1.6,
     Enum.EasingStyle.Linear,
     Enum.EasingDirection.Out
 )
