@@ -1,4 +1,3 @@
-queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
 game:GetService("TeleportService"):Teleport(game.PlaceId)
 end)
@@ -61,8 +60,5 @@ game:GetService("ReplicatedStorage"):WaitForChild("SpinSystem"):WaitForChild("Re
 task.wait(0.05)
 game:GetService("ReplicatedStorage"):WaitForChild("SpinSystem"):WaitForChild("Remotes"):WaitForChild("BackTrackRemote"):FireServer()
 end
-queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
--- Also connect to CharacterAdded for respawns
-player.CharacterAdded:Connect(function(char)
-    startTweenLoop(char)
-end)")
+
+    queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/freebobux.lua'))()")
