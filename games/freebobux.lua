@@ -3,12 +3,35 @@ repeat task.wait() until game:IsLoaded()
 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
 game:GetService("TeleportService"):Teleport(game.PlaceId)
 end)
-game:GetService("RunService").heartbeat:Connect(function()
-game.Players.LocalPlayer.Character.Anti.Disabled = true
-game.Players.LocalPlayer.Character["JyAntiCheat.lua [READ]"]:Destroy()
-game.Players.LocalPlayer.Character.LocalScript:Destroy()
-game:GetService("Players").LocalPlayer.PlayerScripts["Anti-Cheat"]:Destroy()
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+RunService.RenderStepped:Connect(function()
+	local char = LocalPlayer.Character
+	if char then
+		local anti = char:FindFirstChild("Anti")
+		if anti then
+			anti.Disabled = true
+		end
+
+		local jyAnti = char:FindFirstChild("JyAntiCheat.lua [READ]")
+		if jyAnti then
+			jyAnti:Destroy()
+		end
+
+		local localScript = char:FindFirstChild("LocalScript")
+		if localScript then
+			localScript:Destroy()
+		end
+	end
+
+	local antiCheat = LocalPlayer:FindFirstChild("PlayerScripts") and LocalPlayer.PlayerScripts:FindFirstChild("Anti-Cheat")
+	if antiCheat then
+		antiCheat:Destroy()
+	end
 end)
+
 
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
