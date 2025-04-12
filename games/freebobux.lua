@@ -56,18 +56,24 @@ local positions = {
     CFrame.new(100.16658, 259.7258, 73.9058075)
 }
 ]]
--- Autofarm to teleport pads
 local function Autofarm(character)
     local rootPart = character:WaitForChild("HumanoidRootPart", 5)
-    if not rootPart then return end
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not rootPart or not humanoid then return end
 
-    for _, v in ipairs(workspace:WaitForChild("TeleportPads"):GetChildren()) do
-        if v:IsA("BasePart") and v.Name == "obbyback" and v.BrickColor ~= BrickColor.new("Bright red") then
-            rootPart.CFrame = CFrame.new(v.Position)
-            task.wait(0.001)
+    coroutine.wrap(function()
+        while character and humanoid and humanoid.Health > 0 do
+            for _, v in ipairs(workspace:WaitForChild("TeleportPads"):GetChildren()) do
+                if v:IsA("BasePart") and v.Name == "obbyback" and v.BrickColor ~= BrickColor.new("Bright red") then
+                    rootPart.CFrame = CFrame.new(v.Position)
+                    task.wait(0.001)
+                end
+            end
+            task.wait()
         end
-    end
+    end)()
 end
+
 
 -- Trigger autofarm on current and future characters
 if LocalPlayer.Character then
