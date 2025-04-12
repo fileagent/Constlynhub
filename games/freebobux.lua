@@ -59,7 +59,7 @@ local function Autofarm(character)
     coroutine.wrap(function()
         while character and humanoid and humanoid.Health > 0 do
             for _, v in ipairs(workspace:WaitForChild("TeleportPads"):GetChildren()) do
-                if v:IsA("BasePart") and v.Name == "obbyback" and v.BrickColor ~= BrickColor.new("Bright red") then
+                if v:IsA("BasePart") and v.Name == "obbyback" --[[and v.BrickColor ~= BrickColor.new("Bright red")]] then
                     rootPart.CFrame = CFrame.new(v.Position)
                     task.wait(0.001)
                 end
