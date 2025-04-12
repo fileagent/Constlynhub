@@ -12,6 +12,14 @@ local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
+local Standart = require(game:GetService("ReplicatedStorage").StandartValues)
+Standart["maxSpeed"] = math.huge
+Standart["kickReason"] = "discord.gg/A47xp4crDe"
+Standart["maxJumpPower"] = math.huge
+Standart["allowGyro"] = true
+Standart["canNoclip"] = true
+Standart["allowRootAnchor"] = true
+Standart["canFly"] = true
 
 -- Anti-cheat remover
 RunService.RenderStepped:Connect(function()
