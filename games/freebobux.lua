@@ -52,28 +52,36 @@ local positions = {
 }
 ]]
 local function Autofarm(character)
-    local rootPart = character:WaitForChild("HumanoidRootPart", 5)
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if not rootPart or not humanoid then return end
-
     coroutine.wrap(function()
-        while character and humanoid and humanoid.Health > 0 do
-            for _, v in ipairs(workspace:WaitForChild("TeleportPads"):GetChildren()) do
-                if v:IsA("BasePart") and v.Name == "obbyback" --[[and v.BrickColor ~= BrickColor.new("Bright red")]] then
-                    rootPart.CFrame = CFrame.new(v.Position)
-                    task.wait(0.001)
+        local rootPart = character:WaitForChild("HumanoidRootPart", 5)
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+        if not rootPart or not humanoid then return end
+
+        local alive = true
+        humanoid.Died:Connect(function()
+            alive = false
+        end)
+
+        while alive and character and character.Parent do
+            pcall(function()
+                for _, v in ipairs(workspace:WaitForChild("TeleportPads"):GetChildren()) do
+                    if v:IsA("BasePart") and v.Name == "obbyback" and v.BrickColor ~= BrickColor.new("Bright red") then
+                        rootPart.CFrame = CFrame.new(v.Position)
+                        task.wait(0.01)
+                    end
                 end
-            end
-            task.wait()
+            end)
+            task.wait(0.1)
         end
     end)()
 end
 
-
-if LocalPlayer.Character then
-    Autofarm(LocalPlayer.Character)
+if Players.LocalPlayer.Character then
+    Autofarm(Players.LocalPlayer.Character)
 end
-LocalPlayer.CharacterAdded:Connect(Autofarm)
+Players.LocalPlayer.CharacterAdded:Connect(Autofarm)
+
 
 --[[coroutine.wrap(function()
     while true do
