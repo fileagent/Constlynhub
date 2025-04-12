@@ -45,8 +45,8 @@ RunService.RenderStepped:Connect(function()
         if ac then ac:Destroy() end
     end
 end)
-
--- Tween movement positions (not currently used but retained)
+-- unused Tween Info(OLDEST)
+--[[
 local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
 local positions = {
     CFrame.new(93, 45, 74),
@@ -55,7 +55,7 @@ local positions = {
     CFrame.new(93, 247, 73),
     CFrame.new(100.16658, 259.7258, 73.9058075)
 }
-
+]]
 -- Autofarm to teleport pads
 local function Autofarm(character)
     local rootPart = character:WaitForChild("HumanoidRootPart", 5)
@@ -64,7 +64,7 @@ local function Autofarm(character)
     for _, v in ipairs(workspace:WaitForChild("TeleportPads"):GetChildren()) do
         if v:IsA("BasePart") and v.Name == "obbyback" then
             rootPart.CFrame = CFrame.new(v.Position)
-            task.wait(0.005)
+            task.wait(0.001)
         end
     end
 end
@@ -75,10 +75,9 @@ if LocalPlayer.Character then
 end
 LocalPlayer.CharacterAdded:Connect(Autofarm)
 
--- Auto-reset character every 1 second
 coroutine.wrap(function()
     while true do
-        task.wait(1)
+        task.wait(1.3)
         pcall(function()
             if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
                 LocalPlayer.Character.Humanoid.Health = 0
