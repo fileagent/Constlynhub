@@ -1,18 +1,22 @@
 repeat task.wait() until game:IsLoaded()
 
-local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+-- Setup teleport queue for supported exploit environments
+local queueTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 
--- Anti error message teleport loop
+-- Automatically retry teleport on error
 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
     game:GetService("TeleportService"):Teleport(game.PlaceId)
 end)
 
+-- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
-local Standart = require(game:GetService("ReplicatedStorage").StandartValues)
+
+-- Config values
+local Standart = require(ReplicatedStorage:WaitForChild("StandartValues"))
 Standart["maxSpeed"] = math.huge
 Standart["kickReason"] = "discord.gg/A47xp4crDe"
 Standart["maxJumpPower"] = math.huge
@@ -35,17 +39,15 @@ RunService.RenderStepped:Connect(function()
         if localScript then localScript:Destroy() end
     end
 
-    local antiCheat = LocalPlayer:FindFirstChild("PlayerScripts") and LocalPlayer.PlayerScripts:FindFirstChild("Anti-Cheat")
-    if antiCheat then antiCheat:Destroy() end
+    local ps = LocalPlayer:FindFirstChild("PlayerScripts")
+    if ps then
+        local ac = ps:FindFirstChild("Anti-Cheat")
+        if ac then ac:Destroy() end
+    end
 end)
 
--- Tween loop logic
-local tweenInfo = TweenInfo.new(
-    2,
-    Enum.EasingStyle.Linear,
-    Enum.EasingDirection.Out
-)
-
+-- Tween movement positions (not currently used but retained)
+local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
 local positions = {
     CFrame.new(93, 45, 74),
     CFrame.new(93, 89, 75),
@@ -54,43 +56,52 @@ local positions = {
     CFrame.new(100.16658, 259.7258, 73.9058075)
 }
 
-local function startTweenLoop(character)
+-- Autofarm to teleport pads
+local function Autofarm(character)
     local rootPart = character:WaitForChild("HumanoidRootPart", 5)
     if not rootPart then return end
 
-    coroutine.wrap(function()
-        while character and character.Parent do
-            for _, cframe in ipairs(positions) do
-                if not rootPart or not rootPart.Parent then return end
-                local tween = TweenService:Create(rootPart, tweenInfo, {CFrame = cframe})
-                tween:Play()
-                tween.Completed:Wait()
-            end
-            task.wait()
+    for _, v in ipairs(workspace:WaitForChild("TeleportPads"):GetChildren()) do
+        if v:IsA("BasePart") and v.Name == "obbyback" then
+            rootPart.CFrame = CFrame.new(v.Position)
+            task.wait(0.005)
         end
-    end)()
+    end
 end
 
+-- Trigger autofarm on current and future characters
 if LocalPlayer.Character then
-    startTweenLoop(LocalPlayer.Character)
+    Autofarm(LocalPlayer.Character)
 end
+LocalPlayer.CharacterAdded:Connect(Autofarm)
 
-LocalPlayer.CharacterAdded:Connect(startTweenLoop)
-
--- Spin + BackTrack loop
+-- Auto-reset character every 1 second
 coroutine.wrap(function()
     while true do
         task.wait(1)
-        local spinRemote = ReplicatedStorage:WaitForChild("SpinSystem"):WaitForChild("Remotes"):WaitForChild("SpinRemote")
-        local backtrackRemote = ReplicatedStorage:WaitForChild("SpinSystem"):WaitForChild("Remotes"):WaitForChild("BackTrackRemote")
-
-        spinRemote:FireServer()
-        task.wait(0.05)
-        backtrackRemote:FireServer()
+        pcall(function()
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                LocalPlayer.Character.Humanoid.Health = 0
+            end
+        end)
     end
 end)()
 
--- Queue teleport on teleportation
-if queueteleport then
-    queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/freebobux.lua'))()")
+-- Spin and BackTrack remote spam
+coroutine.wrap(function()
+    local spinRemote = ReplicatedStorage:WaitForChild("SpinSystem"):WaitForChild("Remotes"):WaitForChild("SpinRemote")
+    local backtrackRemote = ReplicatedStorage:WaitForChild("SpinSystem"):WaitForChild("Remotes"):WaitForChild("BackTrackRemote")
+
+    while true do
+        task.wait(0.01)
+        pcall(function()
+            spinRemote:FireServer()
+            backtrackRemote:FireServer()
+        end)
+    end
+end)()
+
+-- Queue teleport script for rejoin
+if queueTeleport then
+    queueTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/freebobux.lua'))()")
 end
