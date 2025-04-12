@@ -77,7 +77,7 @@ LocalPlayer.CharacterAdded:Connect(Autofarm)
 
 coroutine.wrap(function()
     while true do
-        task.wait(1.3)
+        task.wait(3)
         pcall(function()
             if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
                 LocalPlayer.Character.Humanoid.Health = 0
