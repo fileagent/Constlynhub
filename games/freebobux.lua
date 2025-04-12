@@ -62,7 +62,7 @@ local function Autofarm(character)
     if not rootPart then return end
 
     for _, v in ipairs(workspace:WaitForChild("TeleportPads"):GetChildren()) do
-        if v:IsA("BasePart") and v.Name == "obbyback" then
+        if v:IsA("BasePart") and v.Name == "obbyback" and v.BrickColor ~= BrickColor.new("Bright red") then
             rootPart.CFrame = CFrame.new(v.Position)
             task.wait(0.001)
         end
