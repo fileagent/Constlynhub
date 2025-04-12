@@ -1,21 +1,17 @@
 repeat task.wait() until game:IsLoaded()
 
--- Setup teleport queue for supported exploit environments
 local queueTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 
--- Automatically retry teleport on error
 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
     game:GetService("TeleportService"):Teleport(game.PlaceId)
 end)
 
--- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 
--- Config values
 local Standart = require(ReplicatedStorage:WaitForChild("StandartValues"))
 Standart["maxSpeed"] = math.huge
 Standart["kickReason"] = "discord.gg/A47xp4crDe"
@@ -25,7 +21,6 @@ Standart["canNoclip"] = true
 Standart["allowRootAnchor"] = true
 Standart["canFly"] = true
 
--- Anti-cheat remover
 RunService.RenderStepped:Connect(function()
     local char = LocalPlayer.Character
     if char then
@@ -75,7 +70,6 @@ local function Autofarm(character)
 end
 
 
--- Trigger autofarm on current and future characters
 if LocalPlayer.Character then
     Autofarm(LocalPlayer.Character)
 end
@@ -92,7 +86,6 @@ LocalPlayer.CharacterAdded:Connect(Autofarm)
     end
 end)()]]
 
--- Spin and BackTrack remote spam
 coroutine.wrap(function()
     local spinRemote = ReplicatedStorage:WaitForChild("SpinSystem"):WaitForChild("Remotes"):WaitForChild("SpinRemote")
     local backtrackRemote = ReplicatedStorage:WaitForChild("SpinSystem"):WaitForChild("Remotes"):WaitForChild("BackTrackRemote")
@@ -106,7 +99,6 @@ coroutine.wrap(function()
     end
 end)()
 
--- Queue teleport script for rejoin
 if queueTeleport then
     queueTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/freebobux.lua'))()")
 end
