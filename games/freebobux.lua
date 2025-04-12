@@ -75,7 +75,7 @@ if LocalPlayer.Character then
 end
 LocalPlayer.CharacterAdded:Connect(Autofarm)
 
-coroutine.wrap(function()
+--[[coroutine.wrap(function()
     while true do
         task.wait(3)
         pcall(function()
@@ -84,7 +84,7 @@ coroutine.wrap(function()
             end
         end)
     end
-end)()
+end)()]]
 
 -- Spin and BackTrack remote spam
 coroutine.wrap(function()
