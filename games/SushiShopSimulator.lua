@@ -34,6 +34,7 @@ Section:Toggle({
         if getgenv().AutoCleanDishes then
             coroutine.wrap(function()
                 while getgenv().AutoCleanDishes do
+                            task.wait()
                fireclickdetector(workspace.Game.Sink2:FindFirstChildWhichIsA("ClickDetector"))
 fireclickdetector(workspace.Game.Sink1:FindFirstChildWhichIsA("ClickDetector"))
                 end
