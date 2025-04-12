@@ -52,8 +52,11 @@ Section:Toggle({
             coroutine.wrap(function()
                 while getgenv().AutoCreateSushi do
                 game:GetService("RunService").heartbeat:Wait()
-fireclickdetector(workspace.Game["23483"]:FindFirstChildWhichIsA("ClickDetector"))
-fireclickdetector(workspace.Game["68215628"]:FindFirstChildWhichIsA("ClickDetector"))
+for i,v in pairs(workspace.Game:GetChildren()) do 
+if v:FindFirstChild("CookingScript") then
+fireclickdetector(v:FindFirstChildWhichIsA("ClickDetector"))
+end
+end
                 end
             end)()
         end
