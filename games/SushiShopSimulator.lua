@@ -35,10 +35,9 @@ Section:Toggle({
             coroutine.wrap(function()
                 while getgenv().AutoCleanDishes do
                             task.wait()
-for i=1,5 do -- faster way
                fireclickdetector(workspace.Game.Sink2:FindFirstChildWhichIsA("ClickDetector"))
 fireclickdetector(workspace.Game.Sink1:FindFirstChildWhichIsA("ClickDetector"))
-                            end
+
                 end
             end)()
         end
@@ -54,13 +53,11 @@ Section:Toggle({
             coroutine.wrap(function()
                 while getgenv().AutoCreateSushi do
                 game:GetService("RunService").heartbeat:Wait()
-for i=1,5 do 
 for i,v in pairs(workspace.Game:GetChildren()) do 
 if v:FindFirstChild("CookingScript") then
 fireclickdetector(v:FindFirstChildWhichIsA("ClickDetector"))
 end
-end
-                            end
+ end
                 end
             end)()
         end
