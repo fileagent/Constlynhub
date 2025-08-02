@@ -7,6 +7,14 @@ end
 
 local playerplots = getplot().Name
 
+function getCurrentWave()
+    local plotPath = workspace.Plots:FindFirstChild(playerplots)
+    if plotPath and plotPath.Stats and plotPath.Stats.Wave then
+        return plotPath.Stats.Wave.Value 
+    end
+    return 0
+end
+
 function getallteddy()
     for _, v in pairs(workspace.Plots:GetChildren()) do 
         if v.Name == playerplots then 
@@ -36,10 +44,18 @@ function autoplay(mode, wave, saves)
     game:GetService("ReplicatedStorage"):WaitForChild("ClientServerRemotes"):WaitForChild("StartWave"):FireServer(waveNumber, mode, false, true)
 end
 
+function autoNextWave(mode, saves)
+    local currentWave = getCurrentWave()
+    local nextWave = currentWave + 1
+    
+    print("Current wave:", currentWave, "Starting next wave:", nextWave)
+    autoplay(mode, nextWave, saves)
+end
+
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GhostDuckyy/UI-Libraries/main/Neverlose/source.lua"))()
 
 local Window = Library:Window({
-    text = "Toy Soldier Z"
+    text = "toy Soldier Z"
 })
 
 local TabSection = Window:TabSection({
@@ -108,28 +124,20 @@ Section:Toggle({
 })
 
 Section:Toggle({
-    text = "Auto Play(AllWave)",
+    text = "Auto Next Wave",
     state = false,
     callback = function(boolean)
-        getgenv().AutoPlayallwave = boolean
+        getgenv().AutoNextWave = boolean
         
-        if getgenv().AutoPlayallwave then
+        if getgenv().AutoNextWave then
             spawn(function()
-                local currentWave = tonumber(getgenv().SelectedWave) or 1
-                
-                while getgenv().AutoPlayallwave do
+                while getgenv().AutoNextWave do
                     if getgenv().SelectedMode and getgenv().SelectedSave then
-                        autoplay(getgenv().SelectedMode, tostring(currentWave), getgenv().SelectedSave)
-                        task.wait(10)
-                        currentWave = currentWave + 1
-                        
-                        if currentWave > 50 then
-                            getgenv().AutoPlayallwave = false
-                            break
-                        end
+                        autoNextWave(getgenv().SelectedMode, getgenv().SelectedSave)
+                        task.wait() 
                     else
-                        warn("Please select Mode and Save File before enabling Auto Play")
-                        getgenv().AutoPlayallwave = false
+                        warn("Please select Mode and Save File before enabling Auto Next Wave")
+                        getgenv().AutoNextWave = false
                         break
                     end
                 end
@@ -139,7 +147,7 @@ Section:Toggle({
 })
 
 Section:Toggle({
-    text = "Auto Play(Selected Wave)",
+    text = "Auto Play(Selectedwave)",
     state = false,
     callback = function(boolean)
         getgenv().AutoPlay = boolean
@@ -149,7 +157,7 @@ Section:Toggle({
                 while getgenv().AutoPlay do
                     if getgenv().SelectedMode and getgenv().SelectedWave and getgenv().SelectedSave then
                         autoplay(getgenv().SelectedMode, getgenv().SelectedWave, getgenv().SelectedSave)
-                        task.wait(5)
+                        task.wait()
                     else
                         warn("Please select Mode, Wave, and Save File before enabling Auto Play")
                         getgenv().AutoPlay = false
