@@ -1,9 +1,6 @@
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-getgenv().SelectedMode = "Easy"
-getgenv().SelectedWave = "1"
-getgenv().SelectedSave = savesfile[1] or nil
 function getplot()
     return LocalPlayer.Team
 end
@@ -27,7 +24,6 @@ function getallteddy()
 end
 
 function autoplay(mode, wave, saves)
-
     local waveNumber = tonumber(wave)
     if not waveNumber then
         warn("Invalid wave number: " .. tostring(wave))
@@ -43,7 +39,7 @@ end
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GhostDuckyy/UI-Libraries/main/Neverlose/source.lua"))()
 
 local Window = Library:Window({
-    text = "toy Soldier Z"
+    text = "Toy Soldier Z"
 })
 
 local TabSection = Window:TabSection({
@@ -63,6 +59,10 @@ local savesfile = {}
 for _, allsaves in pairs(game:GetService("Players").LocalPlayer.Stats.SaveSlots:GetChildren()) do 
     table.insert(savesfile, allsaves.Name)
 end
+
+getgenv().SelectedMode = "Easy"
+getgenv().SelectedWave = "1"
+getgenv().SelectedSave = savesfile[1] or nil
 
 Section:Dropdown({
     text = "Which Save File",
@@ -108,7 +108,38 @@ Section:Toggle({
 })
 
 Section:Toggle({
-    text = "Auto Play",
+    text = "Auto Play(AllWave)",
+    state = false,
+    callback = function(boolean)
+        getgenv().AutoPlayallwave = boolean
+        
+        if getgenv().AutoPlayallwave then
+            spawn(function()
+                local currentWave = tonumber(getgenv().SelectedWave) or 1
+                
+                while getgenv().AutoPlayallwave do
+                    if getgenv().SelectedMode and getgenv().SelectedSave then
+                        autoplay(getgenv().SelectedMode, tostring(currentWave), getgenv().SelectedSave)
+                        task.wait(10)
+                        currentWave = currentWave + 1
+                        
+                        if currentWave > 50 then
+                            getgenv().AutoPlayallwave = false
+                            break
+                        end
+                    else
+                        warn("Please select Mode and Save File before enabling Auto Play")
+                        getgenv().AutoPlayallwave = false
+                        break
+                    end
+                end
+            end)
+        end
+    end
+})
+
+Section:Toggle({
+    text = "Auto Play(Selected Wave)",
     state = false,
     callback = function(boolean)
         getgenv().AutoPlay = boolean
@@ -116,10 +147,9 @@ Section:Toggle({
         if getgenv().AutoPlay then
             spawn(function()
                 while getgenv().AutoPlay do
-                    
                     if getgenv().SelectedMode and getgenv().SelectedWave and getgenv().SelectedSave then
                         autoplay(getgenv().SelectedMode, getgenv().SelectedWave, getgenv().SelectedSave)
-                        task.wait()
+                        task.wait(5)
                     else
                         warn("Please select Mode, Wave, and Save File before enabling Auto Play")
                         getgenv().AutoPlay = false
