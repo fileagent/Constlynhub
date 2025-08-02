@@ -27,7 +27,7 @@ local gamechecker = { -- i add this because the group had diff game
     [16483433878] = 'https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/BlockTales.lua',
     [3769248453] = 'https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/SushiShopSimulator.lua',
     [15798268709] = 'https://raw.githubusercontent.com/fileagent/Constlynhub/refs/heads/main/games/TheSewer.lua',
-    [12215278065] = ''
+    [12215278065] = 'https://github.com/fileagent/Constlynhub/raw/refs/heads/main/games/ToySoldierZ.lua'
 }
 
 if gamechecker[game.PlaceId] then
